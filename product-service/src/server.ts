@@ -17,7 +17,7 @@ prisma.$connect()
   .catch((error: any) => console.error('Erro ao conectar ao banco de dados', error));
 
 // Middleware de autenticação para todas as rotas de produtos
-app.use('/api/products', verifyToken, productRoutes);
+app.use('/', verifyToken, productRoutes);
 
 // Health check
 app.get('/health', (req, res) => {

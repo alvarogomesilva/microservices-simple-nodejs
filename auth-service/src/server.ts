@@ -16,7 +16,7 @@ prisma.$connect()
   .catch((error) => console.error('Erro ao conectar ao banco de dados', error));
 
 // Rotas
-app.use('/api/auth', authRoutes);
+app.use('/', authRoutes);
 
 // Health check
 app.get('/health', (req, res) => {
