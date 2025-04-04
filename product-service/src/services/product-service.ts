@@ -1,4 +1,6 @@
 import { PrismaClient } from '@prisma/client';
+import axios from 'axios';
+
 
 const prisma = new PrismaClient();
 
@@ -7,23 +9,25 @@ export const getAllProducts = async () => {
 };
 
 export const getProductById = async (id: number) => {
-  return await prisma.product.findUnique({
+  const product =  await prisma.product.findUnique({
     where: { id }
-  });
+  }); 
 };
 
 export const createProduct = async (
   name: string,
   description: string,
   price: number,
-  quantity: number
+  quantity: number,
+  categoryId: number
 ) => {
   return await prisma.product.create({
     data: {
       name,
       description,
       price,
-      quantity
+      quantity,
+      categoryId
     }
   });
 };

@@ -30,14 +30,14 @@ export const getProductById = async (req: Request, res: Response) => {
 
 export const createProduct = async (req: Request, res: Response) => {
   try {
-    const { name, description, price, quantity } = req.body;
+    const { name, description, price, quantity, categoryId } = req.body;
 
-    if (!name || !description || price === undefined || quantity === undefined) {
+    if (!name || !description || price === undefined || quantity === undefined || !categoryId) {
       res.status(400).json({ message: 'Dados incompletos' });
       return
     }
 
-    const product = await ProductService.createProduct(name, description, price, quantity);
+    const product = await ProductService.createProduct(name, description, price, quantity, categoryId);
     res.status(201).json(product);
   } catch (error) {
     console.error('Erro ao criar produto:', error);
