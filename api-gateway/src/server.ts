@@ -7,6 +7,7 @@ const PORT = process.env.PORT || 3000
 
 const AUTH_SERVICE_URL = 'http://localhost:3001'
 const PRODUCT_SERVICE_URL = 'http://localhost:3002'
+const CATEGORY_SERVICE_URL = 'http://localhost:3003'
 
 app.use(express.json())
 app.use(cors())
@@ -34,6 +35,19 @@ app.use(
     }
   })
 )
+
+// Proxy para o serviço de categorias
+app.use(
+  '/api/categories',
+  proxy(CATEGORY_SERVICE_URL, {
+    proxyReqPathResolver: (req) => req.originalUrl.replace('/api/categories', ''),
+    proxyReqOptDecorator: (options, req) => {
+      options.headers = req.headers
+      return options
+    }
+  })
+)
+
 
 // Health check
 app.get('/health', (req, res) => {
