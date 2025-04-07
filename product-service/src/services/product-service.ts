@@ -13,6 +13,12 @@ export const getProductById = async (id: number) => {
 };
 
 export const createProduct = async (data: CreateProductDto) => {
+  const categoryId = await axios.get(`http://localhost:3003/categories/${data.categoryId}`)
+
+  if (!categoryId) {
+    return false;
+  }
+
   return await prismaClient.product.create({
     data: {
       name: data.name,
