@@ -37,7 +37,7 @@ export const createProduct = async (req: Request, res: Response) => {
       return
     }
 
-    const product = await ProductService.createProduct(name, description, price, quantity, categoryId);
+    const product = await ProductService.createProduct({name, description, price, quantity, categoryId});
     res.status(201).json(product);
   } catch (error) {
     console.error('Erro ao criar produto:', error);
