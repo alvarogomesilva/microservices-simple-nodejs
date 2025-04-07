@@ -1,22 +1,19 @@
-import { PrismaClient } from '@prisma/client';
 import axios from 'axios';
 import { CreateProductDto } from '../types/product';
-
-
-const prisma = new PrismaClient();
+import { prismaClient } from '../config/prisma-client';
 
 export const getAllProducts = async () => {
-  return await prisma.product.findMany();
+  return await prismaClient.product.findMany();
 };
 
 export const getProductById = async (id: number) => {
-  const product = await prisma.product.findUnique({
+  const product = await prismaClient.product.findUnique({
     where: { id }
   });
 };
 
 export const createProduct = async (data: CreateProductDto) => {
-  return await prisma.product.create({
+  return await prismaClient.product.create({
     data: {
       name: data.name,
       description: data.description,
@@ -38,7 +35,7 @@ export const updateProduct = async (
   }
 ) => {
   // Verificar se o produto existe
-  const product = await prisma.product.findUnique({
+  const product = await prismaClient.product.findUnique({
     where: { id }
   });
 
@@ -46,7 +43,7 @@ export const updateProduct = async (
     return null;
   }
 
-  return await prisma.product.update({
+  return await prismaClient.product.update({
     where: { id },
     data
   });
@@ -54,7 +51,7 @@ export const updateProduct = async (
 
 export const deleteProduct = async (id: number) => {
   // Verificar se o produto existe
-  const product = await prisma.product.findUnique({
+  const product = await prismaClient.product.findUnique({
     where: { id }
   });
 
@@ -62,7 +59,7 @@ export const deleteProduct = async (id: number) => {
     return false;
   }
 
-  await prisma.product.delete({
+  await prismaClient.product.delete({
     where: { id }
   });
 
