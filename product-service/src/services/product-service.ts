@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import axios from 'axios';
+import { CreateProductDto } from '../types/product';
 
 
 const prisma = new PrismaClient();
@@ -9,27 +10,22 @@ export const getAllProducts = async () => {
 };
 
 export const getProductById = async (id: number) => {
-  const product =  await prisma.product.findUnique({
+  const product = await prisma.product.findUnique({
     where: { id }
-  }); 
+  });
 };
 
-export const createProduct = async (
-  name: string,
-  description: string,
-  price: number,
-  quantity: number,
-  categoryId: number
-) => {
+export const createProduct = async (data: CreateProductDto) => {
   return await prisma.product.create({
     data: {
-      name,
-      description,
-      price,
-      quantity,
-      categoryId
+      name: data.name,
+      description: data.description,
+      price: data.price,
+      quantity: data.quantity,
+      categoryId: data.categoryId
     }
   });
+
 };
 
 export const updateProduct = async (
