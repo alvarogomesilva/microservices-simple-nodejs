@@ -7,3 +7,9 @@ export const createCategory = async (name: string) => {
         }
     })
 }
+
+export const getCategoryById = async (id: number) => {
+    return await prismaClient.category.findUnique({
+        where: { id }
+    })
+}

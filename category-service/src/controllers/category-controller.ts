@@ -17,3 +17,20 @@ export const createCategory = async (req: Request, res: Response) => {
         res.status(500).json({ message: 'Erro interno no servidor' });
       }
 }
+
+export const getProductById = async (req: Request, res: Response) => {
+  try {
+    const id = parseInt(req.params.id);
+    const category = await CategoryService.getCategoryById(id);
+
+    if (!category) {
+      res.status(404).json({ message: 'Categoria não encontrado' });
+      return
+    }
+
+    res.status(200).json(category);
+  } catch (error) {
+    console.error('Erro ao buscar categoria:', error);
+    res.status(500).json({ message: 'Erro interno no servidor' });
+  }
+};
