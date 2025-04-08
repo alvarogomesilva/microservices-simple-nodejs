@@ -13,23 +13,23 @@ export const getProductById = async (id: number) => {
 };
 
 export const createProduct = async (data: CreateProductDto) => {
-  const categoryId = await axios.get(`http://localhost:3003/categories/${data.categoryId}`)
+  try {
 
-  if (!categoryId) {
+    return await prismaClient.product.create({
+      data: {
+        name: data.name,
+        description: data.description,
+        price: data.price,
+        quantity: data.quantity,
+        categoryId: data.categoryId
+      }
+    });
+  } catch (error) {
+    console.error(error);
     return false;
   }
-
-  return await prismaClient.product.create({
-    data: {
-      name: data.name,
-      description: data.description,
-      price: data.price,
-      quantity: data.quantity,
-      categoryId: data.categoryId
-    }
-  });
-
 };
+
 
 export const updateProduct = async (
   id: number,

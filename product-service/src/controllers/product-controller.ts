@@ -1,5 +1,6 @@
-import { Request, Response } from 'express';
+import { Request, response, Response } from 'express';
 import * as ProductService from '../services/product-service';
+import axios from 'axios';
 
 export const getAllProducts = async (req: Request, res: Response) => {
   try {
@@ -30,17 +31,28 @@ export const getProductById = async (req: Request, res: Response) => {
 
 export const createProduct = async (req: Request, res: Response) => {
   try {
+    const token = req.headers.authorization?.substring(7)
     const { name, description, price, quantity, categoryId } = req.body;
+
+    await axios.get(`http://localhost:3003/${categoryId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
 
     if (!name || !description || price === undefined || quantity === undefined || !categoryId) {
       res.status(400).json({ message: 'Dados incompletos' });
-      return
+      return;
     }
 
-    const product = await ProductService.createProduct({name, description, price, quantity, categoryId});
+    const product = await ProductService.createProduct({ name, description, price, quantity, categoryId });
     res.status(201).json(product);
-  } catch (error) {
-    console.error('Erro ao criar produto:', error);
+  } catch (error: any) {
+    if (error.status === 404) {
+      res.status(400).json({ message: "Categoria não encontrada" })
+      return;
+    }
+
     res.status(500).json({ message: 'Erro interno no servidor' });
   }
 };
@@ -63,7 +75,9 @@ export const updateProduct = async (req: Request, res: Response) => {
     }
 
     res.status(200).json(product);
-  } catch (error) {
+  } catch (error: any) {
+
+
     console.error('Erro ao atualizar produto:', error);
     res.status(500).json({ message: 'Erro interno no servidor' });
   }
